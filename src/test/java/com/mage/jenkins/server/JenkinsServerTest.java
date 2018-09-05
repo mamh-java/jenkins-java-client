@@ -4,6 +4,7 @@ import com.mage.jenkins.model.Crumb;
 import com.mage.jenkins.model.HudsonInfo;
 import com.mage.jenkins.model.Job;
 
+import com.mage.jenkins.model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,5 +52,11 @@ public class JenkinsServerTest {
     public void testGetCrumb() {
         Crumb crumb = server.getCrumb();
         pprint(crumb);
+    }
+
+    @Test
+    public void testWhoAmI() {
+        User s = server.whoAmI();
+        pprint(s);
     }
 }

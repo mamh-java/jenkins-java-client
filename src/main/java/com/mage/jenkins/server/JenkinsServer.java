@@ -2,10 +2,7 @@ package com.mage.jenkins.server;
 
 import com.mage.jenkins.client.JenkinsClient;
 import com.mage.jenkins.client.JenkinsConnection;
-import com.mage.jenkins.model.Crumb;
-import com.mage.jenkins.model.HudsonInfo;
-import com.mage.jenkins.model.Job;
-import com.mage.jenkins.model.AllView;
+import com.mage.jenkins.model.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +11,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+
+import static com.mage.jenkins.utils.UrlUtils.joinPath;
 
 
 public class JenkinsServer implements Closeable {
@@ -51,6 +50,10 @@ public class JenkinsServer implements Closeable {
 
     public Crumb getCrumb() {
         return client.get("/crumbIssuer", Crumb.class);
+    }
+
+    public User whoAmI() {
+        return client.get("/me?pretty=true&depth=10", User.class);
     }
 
     /**

@@ -5,7 +5,7 @@ import com.mage.jenkins.client.JenkinsConnection;
 import com.mage.jenkins.model.Crumb;
 import com.mage.jenkins.model.HudsonInfo;
 import com.mage.jenkins.model.Job;
-import com.mage.jenkins.model.MainView;
+import com.mage.jenkins.model.AllView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +41,8 @@ public class JenkinsServer implements Closeable {
     }
 
     public List<Job> getJobs(String viewName) {
-        MainView mainView = client.get(String.format("/view/%s/", viewName), MainView.class);
-        return mainView.getJobs();
+        AllView allView = client.get(String.format("/view/%s/", viewName), AllView.class);
+        return allView.getJobs();
     }
 
     public HudsonInfo getHudsonInfo() {

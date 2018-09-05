@@ -2,7 +2,7 @@ package com.mage.jenkins.model;
 
 import java.util.List;
 
-public class MainView extends View {
+public class AllView extends View {
     private String description;
     private List<Job> jobs;
 

@@ -3,9 +3,9 @@ package com.mage.jenkins.server;
 import com.mage.jenkins.model.Crumb;
 import com.mage.jenkins.model.HudsonInfo;
 import com.mage.jenkins.model.Job;
-
 import com.mage.jenkins.model.Queue;
 import com.mage.jenkins.model.User;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,10 +80,21 @@ public class JenkinsServerTest {
 
     }
 
-        @Test
+    @Test
     public void testGetJob1() {
         Job job = server.getJob("s_test_1");
         pprint(job);
 
+    }
+
+    @Test
+    public void testGetConsoleOutputText() {
+        String outputText = server.getConsoleOutputText("s_test_1", 45);
+        System.out.println(outputText);
+    }
+    @Test
+    public void testGetConsoleOutputHtml() {
+        String outputText = server.getConsoleOutputHtml("s_test_1", 45);
+        System.out.println(outputText);
     }
 }

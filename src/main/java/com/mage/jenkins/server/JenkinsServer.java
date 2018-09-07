@@ -88,6 +88,20 @@ public class JenkinsServer implements Closeable {
         return client.get(path, Job.class);
     }
 
+    public String getConsoleOutput(String name, int number) {
+        return getConsoleOutputText(name, number);
+    }
+
+    public String getConsoleOutputText(String name, int number) {
+        String path = "/job/" + name + "/" + number + "/logText/progressiveText";
+        return new String(client.getRaw(path));
+    }
+
+    public String getConsoleOutputHtml(String name, int number) {
+        String path = "/job/" + name + "/" + number + "/logText/progressiveHtml";
+        return new String(client.getRaw(path));
+    }
+
     /**
      * Closes underlying resources.
      * Closed instances should no longer be used

@@ -7,6 +7,7 @@ import com.mage.jenkins.model.BlockedItem;
 import com.mage.jenkins.model.Crumb;
 import com.mage.jenkins.model.HudsonInfo;
 import com.mage.jenkins.model.Job;
+import com.mage.jenkins.model.JobDetails;
 import com.mage.jenkins.model.Queue;
 import com.mage.jenkins.model.User;
 
@@ -72,6 +73,19 @@ public class JenkinsServer implements Closeable {
 
     public User whoAmI() {
         return client.get("/me?pretty=true&depth=10", User.class);
+    }
+
+    public Job getJob(String name, boolean withDetails) {
+        if (withDetails) {
+            return client.get("/job/" + name, JobDetails.class);
+        } else {
+            return getJob(name);
+        }
+    }
+
+    public Job getJob(String name) {
+        String path = "/job/" + name + "?pretty=true&tree=name,color,url";
+        return client.get(path, Job.class);
     }
 
     /**

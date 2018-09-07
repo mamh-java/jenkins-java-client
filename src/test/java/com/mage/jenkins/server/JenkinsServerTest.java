@@ -72,4 +72,18 @@ public class JenkinsServerTest {
         List<Job> jobs = server.getQueueJobs();
         pprint(jobs);
     }
+
+    @Test
+    public void testGetJob() {
+        Job job = server.getJob("s_test_1", true);
+        pprint(job);
+
+    }
+
+        @Test
+    public void testGetJob1() {
+        Job job = server.getJob("s_test_1");
+        pprint(job);
+
+    }
 }

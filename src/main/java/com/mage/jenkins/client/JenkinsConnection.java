@@ -62,4 +62,5 @@ public interface JenkinsConnection extends Closeable {
      */
     String getString(String path)  ;
 
+    void post(String path, Map<String, String> params);
 }

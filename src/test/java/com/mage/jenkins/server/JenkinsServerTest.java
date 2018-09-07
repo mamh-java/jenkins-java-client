@@ -11,7 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.net.URI;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.mage.jenkins.utils.Utils.pprint;
 
@@ -92,9 +95,27 @@ public class JenkinsServerTest {
         String outputText = server.getConsoleOutputText("s_test_1", 45);
         System.out.println(outputText);
     }
+
     @Test
     public void testGetConsoleOutputHtml() {
         String outputText = server.getConsoleOutputHtml("s_test_1", 45);
         System.out.println(outputText);
+    }
+
+    @Test
+    public void testBuildJob() {
+        Map<String, String> params = new HashMap<>();
+        params.put("PARAM1", "日期   " + new Date());
+        server.buildJob("s_test_3", params);
+    }
+
+    @Test
+    public void testBuildJob1() {
+        server.buildJob("s_test_3", null);
+    }
+
+    @Test
+    public void testBuildJob2() {
+        server.buildJob("s_test_2");
     }
 }

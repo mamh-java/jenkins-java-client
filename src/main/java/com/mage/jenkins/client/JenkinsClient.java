@@ -1,11 +1,13 @@
 package com.mage.jenkins.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.mage.jenkins.model.BaseModel;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -182,6 +184,25 @@ public class JenkinsClient extends AbstractJenkinsClient implements JenkinsConne
         return null;
     }
 
+    @Override
+    public void post(String path, Map<String, String> params) {
+        if (params != null) {
+            String value;
+            try {
+                value = mapper.writeValueAsString(params);
+                HttpResponse response = request(path, HttpPost.METHOD_NAME, value);
+            } catch (JsonProcessingException e) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                HttpResponse response = request(path, HttpPost.METHOD_NAME, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * Closes underlying resources. Any I/O errors whilst closing are logged

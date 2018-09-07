@@ -7,6 +7,7 @@ import org.apache.http.message.BasicNameValuePair;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class UrlUtils {
@@ -116,6 +117,12 @@ public final class UrlUtils {
     public static String joinParam(String root, String name, List<String> values) {
         List<NameValuePair> list = values.stream().map(p ->
                 new BasicNameValuePair(name, p)).collect(Collectors.toList());
+        return joinParam(root, list);
+    }
+
+    public static String joinParam(String root, Map<String, String> values) {
+        List<NameValuePair> list = values.entrySet().stream().map(p ->
+                new BasicNameValuePair(p.getKey(), p.getValue())).collect(Collectors.toList());
         return joinParam(root, list);
     }
 

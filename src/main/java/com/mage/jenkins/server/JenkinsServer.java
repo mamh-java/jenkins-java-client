@@ -10,6 +10,7 @@ import com.mage.jenkins.model.Job;
 import com.mage.jenkins.model.JobDetails;
 import com.mage.jenkins.model.Queue;
 import com.mage.jenkins.model.User;
+import com.mage.jenkins.utils.UrlUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -94,12 +96,35 @@ public class JenkinsServer implements Closeable {
 
     public String getConsoleOutputText(String name, int number) {
         String path = "/job/" + name + "/" + number + "/logText/progressiveText";
-        return new String(client.getRaw(path));
+        byte[] raw = client.getRaw(path);
+        if (raw != null) {
+            return new String(raw);
+        }
+        return "";
     }
 
     public String getConsoleOutputHtml(String name, int number) {
         String path = "/job/" + name + "/" + number + "/logText/progressiveHtml";
-        return new String(client.getRaw(path));
+        byte[] raw = client.getRaw(path);
+        if (raw != null) {
+            return new String(raw);
+        }
+        return "";
+    }
+
+    public void buildJob(String name, Map<String, String> params) {
+        //有参数的编译任务需要用这个方法
+        String path = "/job/" + name + "/buildWithParameters";
+        if (params != null) {
+            path = UrlUtils.joinParam(path, params);
+        }
+        client.post(path, params);
+    }
+
+    public void buildJob(String name) {
+        //没有参数的构建任务需要这个方法
+        String path = "/job/" + name + "/build";
+        client.post(path, null);
     }
 
     /**

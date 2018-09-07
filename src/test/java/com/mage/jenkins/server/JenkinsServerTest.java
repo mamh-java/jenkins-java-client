@@ -4,6 +4,7 @@ import com.mage.jenkins.model.Crumb;
 import com.mage.jenkins.model.HudsonInfo;
 import com.mage.jenkins.model.Job;
 
+import com.mage.jenkins.model.Queue;
 import com.mage.jenkins.model.User;
 import org.junit.After;
 import org.junit.Before;
@@ -58,5 +59,17 @@ public class JenkinsServerTest {
     public void testWhoAmI() {
         User s = server.whoAmI();
         pprint(s);
+    }
+
+    @Test
+    public void testGetQueue() {
+        Queue queue = server.getQueue();
+        pprint(queue);
+    }
+
+    @Test
+    public void testGetQueueJobs() {
+        List<Job> jobs = server.getQueueJobs();
+        pprint(jobs);
     }
 }

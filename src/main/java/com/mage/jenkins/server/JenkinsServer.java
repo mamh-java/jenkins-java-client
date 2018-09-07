@@ -2,7 +2,13 @@ package com.mage.jenkins.server;
 
 import com.mage.jenkins.client.JenkinsClient;
 import com.mage.jenkins.client.JenkinsConnection;
-import com.mage.jenkins.model.*;
+import com.mage.jenkins.model.AllView;
+import com.mage.jenkins.model.BlockedItem;
+import com.mage.jenkins.model.Crumb;
+import com.mage.jenkins.model.HudsonInfo;
+import com.mage.jenkins.model.Job;
+import com.mage.jenkins.model.Queue;
+import com.mage.jenkins.model.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +17,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
-
-import static com.mage.jenkins.utils.UrlUtils.joinPath;
+import java.util.stream.Collectors;
 
 
 public class JenkinsServer implements Closeable {
@@ -43,6 +48,19 @@ public class JenkinsServer implements Closeable {
         AllView allView = client.get(String.format("/view/%s/", viewName), AllView.class);
         return allView.getJobs();
     }
+
+    public Queue getQueue() {
+        //这里只获取我们关系的job的名称，url，color这3个值，其他的不关心
+        return client.get("/queue?tree=items[task[name,url,color]]", Queue.class);
+    }
+
+    public List<Job> getQueueJobs() {
+        //获取所有的队列中等待的job
+        Queue queue = getQueue();
+        List<BlockedItem> items = queue.getItems();
+        return items.stream().map(BlockedItem::getTask).collect(Collectors.toList());
+    }
+
 
     public HudsonInfo getHudsonInfo() {
         return client.get("/", HudsonInfo.class);

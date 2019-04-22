@@ -173,13 +173,10 @@ public class JenkinsClient extends AbstractJenkinsClient implements JenkinsConne
 
     @Override
     public byte[] getRaw(String path) {
-        HttpResponse response = null;
         try {
-            response = request(path, HttpGet.METHOD_NAME, null);
-            byte[] bytes = getResponseBytes(response);
-            return bytes;
+            return request(path, HttpGet.METHOD_NAME, null);
         } catch (IOException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return null;
     }
@@ -190,14 +187,14 @@ public class JenkinsClient extends AbstractJenkinsClient implements JenkinsConne
             String value;
             try {
                 value = mapper.writeValueAsString(params);
-                HttpResponse response = request(path, HttpPost.METHOD_NAME, value);
-            } catch (JsonProcessingException e) {
+                request(path, HttpPost.METHOD_NAME, value);
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
         } else {
             try {
-                HttpResponse response = request(path, HttpPost.METHOD_NAME, null);
+                request(path, HttpPost.METHOD_NAME, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -7,6 +7,7 @@ import com.mage.jenkins.utils.UrlUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
@@ -87,7 +88,7 @@ public abstract class AbstractJenkinsClient implements
         }
     }
 
-    protected HttpResponse request(String path, String verb, String requestBody, Header... headers) throws IOException {
+    protected byte[] request(String path, String verb, String requestBody, Header... headers) throws IOException {
         HttpRequestBase method;
         URI uri = UrlUtils.toJsonApiUri(this.uri, context, path);
         switch (verb) {
@@ -113,11 +114,35 @@ public abstract class AbstractJenkinsClient implements
             method.addHeader(header);
         }
 
-        HttpResponse response = client.execute(method, httpContext);
+        HttpResponse response = null;
+        try {
+            response = client.execute(method, httpContext);
+            checkResponse(response);
+            return getResponseBytes(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (response != null)
+                releaseHttpEntity(response.getEntity());
+            releaseConnection(method);
+        }
+        return null;
+    }
 
-        checkResponse(response);
+    public void releaseConnection(HttpRequestBase httpRequestBase) {
+        httpRequestBase.releaseConnection();
+    }
 
-        return response;
+    public void releaseHttpEntity(HttpEntity entity) throws IOException {
+        if (entity != null) {
+            if (entity.isStreaming()) {
+                InputStream inStream = entity.getContent();
+                if (inStream != null) {
+                    inStream.close();
+                }
+            }
+
+        }
     }
 
     //从response 中获取 一个字节数组，去除掉json开头的魔术字符串

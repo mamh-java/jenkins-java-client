@@ -1,5 +1,6 @@
 package com.mage.jenkins.server;
 
+import com.mage.jenkins.model.BlockedItem;
 import com.mage.jenkins.model.Crumb;
 import com.mage.jenkins.model.HudsonInfo;
 import com.mage.jenkins.model.Job;
@@ -37,6 +38,7 @@ public class JenkinsServerTest {
     @Test
     public void testGetJobs() {
         List<Job> jobs = server.getJobs();
+        List<Job> jobs1 = server.getJobs();
         pprint(jobs);
     }
 
@@ -67,6 +69,14 @@ public class JenkinsServerTest {
     @Test
     public void testGetQueue() {
         Queue queue = server.getQueue();
+        User s = server.whoAmI();
+        System.out.println(s);
+        User s1 = server.whoAmI();
+        System.out.println(s1);
+
+
+        Queue qq = server.getQueue();
+        Queue q = server.getQueue();
         pprint(queue);
     }
 
